@@ -1,4 +1,4 @@
-import urllib
+import urllib.request as urllib
 from lxml import html
 class ZillowApiWorker:
     zillowId = "X1-ZWz18wdrv6sq2z_3bebs"
@@ -6,11 +6,15 @@ class ZillowApiWorker:
 
     def makeRequest(self, address, citystatezip):
         url = self.baseUrl + address + "&citystatezip=" + citystatezip
-        xml = urllib.urlopen(url).read()
-        results = html.fromstring(xml.xpath("/SearchResults:searchresults/response/results/result"))
-        links = []
+        print("Making Api Request: "+url)
+        try:
+            xml = html.fromstring(urllib.urlopen(url).read())
+            results = xml.xpath("/SearchResults:searchresults/response/results/result")
+            links = []
 
-        for result in results:
-            links.append(result.xpath("/links/homedetails").text)
+            for result in results:
+                links.append(result.xpath("/links/homedetails").text)
+                return links
 
-        return links
+        except:
+            return

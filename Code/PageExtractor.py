@@ -1,10 +1,11 @@
-import urllib
+import urllib.request as urllib
 from lxml import html
 
 class PageExtractor:
     "This class contains methods which extract data from the property's listing page. You can create multiple instances of this class and multihread your extractions"
 
     def execute(self, url):
+        print("Fetching Data From: "+url)
         dataDictionary = {}
         page = self.__getPage(url)
         self.__getValuesUnderHeader_FactsFeatures(page, dataDictionary)

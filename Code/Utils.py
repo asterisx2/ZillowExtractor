@@ -1,19 +1,20 @@
 class Utils:
-    filePath = ""
-    delimiter = ""
-    def __init__(self, filepath, delimiter):
-        self.filePath = filepath;
-        self.delimiter = delimiter
 
-    def getVals(self):
+    def getVals(self, filePath, delimiter):
         list = []
-        f = open(self.filePath,'r')
+        f = open(filePath,'r')
 
         line = f.readline()
 
         while line:
-            vals = line.split(self.delimiter)
-            list.append(vals)
+            vals = line.split(delimiter)
+            vv = []
+            for val in vals:
+                va = val.strip()
+                if(va.find("CHICAGO") != -1):
+                    va = "Chicago, "
+                vv.append(va)
+            list.append(vv)
             line = f.readline()
 
         f.close()
