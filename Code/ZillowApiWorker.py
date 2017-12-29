@@ -1,20 +1,34 @@
 import urllib.request as urllib
-from lxml import html
-class ZillowApiWorker:
-    zillowId = "X1-ZWz18wdrv6sq2z_3bebs"
-    baseUrl = "http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=" + zillowId + "&address="
+from lxml import etree
+from BeautifulSoup import BeautifulSoup
 
-    def makeRequest(self, address, citystatezip):
-        url = self.baseUrl + address + "&citystatezip=" + citystatezip
-        print("Making Api Request: "+url)
-        try:
-            xml = html.fromstring(urllib.urlopen(url).read())
-            results = xml.xpath("/SearchResults:searchresults/response/results/result")
-            links = []
 
-            for result in results:
-                links.append(result.xpath("/links/homedetails").text)
-                return links
+zillowId = "X1-ZWz18wdrv6sq2z_3bebs"
+linksUrl = "http://www.zillow.com/webservice/GetSearchResults.htm?zws-id=" + zillowId + "&address="
+propertyUrl = "http://www.zillow.com/webservice/GetUpdatedPropertyDetails.htm?zws-id="+zillowId+"&zpid="
 
-        except:
-            return
+def printNode(node):
+    print(etree.tostring(node, pretty_print=True))
+
+def getProperty(zpid):
+    url = propertyUrl + zpid;
+    xml = urllib.urlopen(url)
+    soup = BeautifulSoup(xml)
+
+def getZpids(address, citystatezip):
+    url = linksUrl + address + "&citystatezip=" + citystatezip
+    file = urllib.urlopen(url)
+    data = file
+    xmldoc = etree.parse(data)
+    file.close()
+    results = xmldoc.xpath("/SearchResults:searchresults/response/results/result", namespaces={
+        'SearchResults': 'http://www.zillow.com/static/xsd/SearchResults.xsd'
+    })
+    links = []
+    for result in results:
+        zpid = result.xpath("zpid", namespaces={
+        'zpid': 'http://www.zillow.com/static/xsd/SearchResults.xsd'
+    })[0]
+        print("[API]Found Property ZPID: "+zpid.text)
+        links.append(zpid.text)
+    return links
