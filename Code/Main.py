@@ -1,9 +1,10 @@
 from Utils import Utils
-from ZillowApiWorker import ZillowApiWorker
+import ZillowApiWorker
 import urllib.parse
+import CSVHelper
 
 utils = Utils()
-apiWorker = ZillowApiWorker()
+apiWorker = ZillowApiWorker
 zpids = []
 results = []
 
@@ -31,3 +32,9 @@ def get_zpids(zpids, addresses):
         r = ZillowApiWorker.getZpids(encode(address[0]), encode(address[1] + "IL"))
         if (r != None):
             zpids += r
+
+getAddresses()
+get_zpids(zpids, addresses)
+get_results(zpids, results)
+CSVHelper.saveToCsv("export.csv",results)
+

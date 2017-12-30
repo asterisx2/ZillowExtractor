@@ -1,6 +1,5 @@
 import urllib.request as urllib
 from lxml import etree
-from BeautifulSoup import BeautifulSoup
 
 
 zillowId = "X1-ZWz18wdrv6sq2z_3bebs"
@@ -13,7 +12,8 @@ def printNode(node):
 def getProperty(zpid):
     url = propertyUrl + zpid;
     xml = urllib.urlopen(url)
-    soup = BeautifulSoup(xml)
+    print("[API]Fetched Property For ZPID: " + zpid)
+    return xml
 
 def getZpids(address, citystatezip):
     url = linksUrl + address + "&citystatezip=" + citystatezip
