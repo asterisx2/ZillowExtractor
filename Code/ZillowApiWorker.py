@@ -12,7 +12,6 @@ def printNode(node):
 def getProperty(zpid):
     url = propertyUrl + zpid;
     xml = urllib.urlopen(url).read()
-    print("[API]Fetched Property For ZPID: " + zpid+ " "+str(xml).replace('<?xml version="1.0" encoding="utf-8"?>',''))
     return str(xml).replace('<?xml version="1.0" encoding="utf-8"?>','')
 
 def getZpids(address, citystatezip):

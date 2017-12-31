@@ -23,8 +23,8 @@ def run(links, results, vals):
 def get_results(zpids, results):
     for zpid in zpids:
         r = apiWorker.getProperty(zpid)
-        if (r != None):
-            results += r
+        results += r
+        print(results)
 
 
 def get_zpids(zpids, addresses):
