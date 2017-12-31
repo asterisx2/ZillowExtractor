@@ -6,7 +6,7 @@ import CSVHelper
 utils = Utils()
 apiWorker = ZillowApiWorker
 zpids = []
-results = []
+results = ""
 
 def encode(val):
     return urllib.parse.quote_plus(val)
