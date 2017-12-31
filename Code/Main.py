@@ -38,7 +38,7 @@ get_zpids(zpids, addresses)
 results += '<?xml version="1.0" encoding="utf-8"?><Properties>'
 get_results(zpids, results)
 results += '</Properties>'
-f =  open("export.xml", "wb")
+f =  open("export.xml", "w")
 f.write(results)
 f.close()
 #CSVHelper.saveToCsv("export.csv",results)
