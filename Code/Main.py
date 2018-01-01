@@ -6,7 +6,7 @@ import CSVHelper
 utils = Utils()
 apiWorker = ZillowApiWorker
 zpids = []
-results = ""
+results = []
 
 def encode(val):
     return urllib.parse.quote_plus(val)
@@ -23,8 +23,8 @@ def run(links, results, vals):
 def get_results(zpids, results):
     for zpid in zpids:
         r = apiWorker.getProperty(zpid)
-        results += r
-        print(results)
+        results .append(r)
+
 
 
 def get_zpids(zpids, addresses):
@@ -35,11 +35,15 @@ def get_zpids(zpids, addresses):
 
 getAddresses()
 get_zpids(zpids, addresses)
-results += '<?xml version="1.0" encoding="utf-8"?><Properties>'
+results .append('<?xml version="1.0" encoding="utf-8"?><Properties>')
 get_results(zpids, results)
-results += '</Properties>'
+results.append('</Properties>')
+string = ""
+for result in results:
+    string += result
 f =  open("export.xml", "w")
-f.write(str(results))
+print(string)
+f.write(str(string))
 f.close()
 #CSVHelper.saveToCsv("export.csv",results)
 
