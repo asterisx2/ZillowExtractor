@@ -13,6 +13,7 @@ def getProperty(zpid):
     url = propertyUrl + zpid;
     xml = urllib.urlopen(url).read()
     #print(xml)
+    xml = xml.decode('utf-8')
     return str(xml).replace('<?xml version="1.0" encoding="utf-8"?>','')
 
 def getZpids(address, citystatezip):
