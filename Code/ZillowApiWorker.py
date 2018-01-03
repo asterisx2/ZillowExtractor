@@ -15,7 +15,10 @@ def getProperty(zpid):
     xml = urllib.urlopen(url).read()
     #print(xml)
     xml = xml.decode('utf-8')
-    return str(xml).replace('<?xml version="1.0" encoding="utf-8"?>','')
+    if(str(xml).find("<code>0</code>")!=-1):
+        return str(xml).replace('<?xml version="1.0" encoding="utf-8"?>','')
+    else:
+        return None
 
 def getZpids(address, citystatezip):
     url = linksUrl + address + "&citystatezip=" + citystatezip
