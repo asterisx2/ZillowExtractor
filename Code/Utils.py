@@ -14,6 +14,7 @@ class Utils:
                 if(va.find("CHICAGO") != -1):
                     va = "Chicago, "
                 vv.append(va)
+            vv.append(line)
             list.append(vv)
             line = f.readline()
 

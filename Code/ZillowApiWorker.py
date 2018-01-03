@@ -22,12 +22,12 @@ def getZpids(address, citystatezip):
     data = file
     xmldoc = etree.parse(data)
     file.close()
-    results = xmldoc.xpath("/SearchResults:searchresults/response/results/result", namespaces={
+    results = xmldoc.xpath("/SearchResults:searchresults/response/results/result", namespaces = {
         'SearchResults': 'http://www.zillow.com/static/xsd/SearchResults.xsd'
     })
     links = []
     for result in results:
-        zpid = result.xpath("zpid", namespaces={
+        zpid = result.xpath("zpid", namespaces = {
         'zpid': 'http://www.zillow.com/static/xsd/SearchResults.xsd'
     })[0]
         print("[API]Found Property ZPID: "+zpid.text)

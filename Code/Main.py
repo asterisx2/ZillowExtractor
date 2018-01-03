@@ -7,6 +7,7 @@ utils = Utils()
 apiWorker = ZillowApiWorker
 zpids = []
 results = []
+noGood= []
 
 def encode(val):
     return urllib.parse.quote_plus(val)
@@ -21,29 +22,44 @@ def run(links, results, vals):
 
 
 def get_results(zpids, results):
+    results.append('<?xml version="1.0" encoding="utf-8"?><Properties>')
     for zpid in zpids:
         r = apiWorker.getProperty(zpid)
         results .append(r)
+    results.append('</Properties>')
 
 
 
 def get_zpids(zpids, addresses):
     for address in addresses:
         r = ZillowApiWorker.getZpids(encode(address[0]), encode(address[1] + "IL"))
-        if (r != None):
-            zpids += r
+        if not r:
+            print("No results for " + address[3])
+            noGood.append(address[3])
+        else:
+           zpids += r
+
+def save_results():
+    string = ""
+    for result in results:
+        string += result
+    f = open("export.xml", "w")
+    print(string)
+    f.write(str(string))
+    f.close()
+
+def save_NoGood(noGood):
+    f = open("NoGood.txt", "w")
+    for ng in noGood:
+        f.write(ng )
+    f.close();
+
+
 
 getAddresses()
 get_zpids(zpids, addresses)
-results .append('<?xml version="1.0" encoding="utf-8"?><Properties>')
-get_results(zpids, results)
-results.append('</Properties>')
-string = ""
-for result in results:
-    string += result
-f =  open("export.xml", "w")
-print(string)
-f.write(str(string))
-f.close()
+save_NoGood(noGood)
+#get_results(zpids, results)
+save_results()
 #CSVHelper.saveToCsv("export.csv",results)
 
