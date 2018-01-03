@@ -21,15 +21,12 @@ def run(links, results, vals):
     get_zpids(links, vals)
     get_results(links, results)
 
-
 def get_results(zpids, results):
     results.append('<?xml version="1.0" encoding="utf-8"?><Properties>')
     for zpid in zpids:
         r = apiWorker.getProperty(zpid)
         results .append(r)
     results.append('</Properties>')
-
-
 
 def get_zpids(zpids, addresses):
     for address in addresses:
