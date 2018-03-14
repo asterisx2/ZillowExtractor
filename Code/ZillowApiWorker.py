@@ -10,13 +10,14 @@ deepCompsUrl = "http://www.zillow.com/webservice/GetDeepComps.htm?zws-id=" + zil
 def printNode(node):
     print(etree.tostring(node, pretty_print=True))
 
-def getProperty(zpid):
+def getProperty(zpid, price):
     url = propertyUrl + zpid;
     xml = urllib.urlopen(url).read()
-    #print(xml)
+    print(url)
     xml = xml.decode('utf-8')
+    p = "<zestimate>" + str(price) + "</zestimate>"
     if(str(xml).find("<code>0</code>")!=-1):
-        return str(xml).replace('<?xml version="1.0" encoding="utf-8"?>','')
+        return str(xml).replace('<?xml version="1.0" encoding="utf-8"?>','').replace("</response></UpdatedPropertyDetails:updatedPropertyDetails>", p+"</response></UpdatedPropertyDetails:updatedPropertyDetails>")
     else:
         return None
 
@@ -26,6 +27,7 @@ def getZpids(address, citystatezip):
     data = file
     xmldoc = etree.parse(data)
     file.close()
+    #print(url)
     results = xmldoc.xpath("/SearchResults:searchresults/response/results/result", namespaces = {
         'SearchResults': 'http://www.zillow.com/static/xsd/SearchResults.xsd'
     })
@@ -44,7 +46,6 @@ def getDeepComps(zpid, count):
     data = file
     xmldoc = etree.parse(data)
     file.close()
-
     comps = xmldoc.xpath("/Comps:comps/response/properties/comparables/comp", namespaces={
         'Comps': 'http://www.zillow.com/static/xsd/Comps.xsd'
     })

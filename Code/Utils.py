@@ -11,12 +11,21 @@ class Utils:
             vv = []
             for val in vals:
                 va = val.strip()
-                if(va.find("CHICAGO") != -1):
-                    va = "Chicago, "
                 vv.append(va)
             vv.append(line)
             list.append(vv)
             line = f.readline()
 
         f.close()
+        return list
+    def getZpids(self, filePath):
+        list = []
+        f = open(filePath, 'r')
+
+        line = f.readline()
+
+        while line:
+            list.append(line)
+            line = f.readline()
+
         return list
