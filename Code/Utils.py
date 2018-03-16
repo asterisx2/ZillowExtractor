@@ -15,9 +15,14 @@ class Utils:
             vv.append(line)
             list.append(vv)
             line = f.readline()
-
+        start = int(input('Enter the 0 based start index'))
+        end = int(input('Enter the 0 based last index'))
         f.close()
-        return list
+        l = []
+        for i in [start, end]:
+            l.append(list[i])
+        return l
+
     def getZpids(self, filePath):
         list = []
         f = open(filePath, 'r')
