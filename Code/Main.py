@@ -9,6 +9,7 @@ zpids = set()
 results = []
 noGood= []
 comparableProperties = 5
+addresses = []
 
 def encode(val):
     return urllib.parse.quote_plus(val)
@@ -22,7 +23,6 @@ def run(links, results, vals):
     get_results(links, results)
 
 def get_results(zpids, results):
-
     for zpid in zpids:
         r = apiWorker.getProperty(zpid[0],zpid[1])
         if r:
@@ -32,7 +32,7 @@ def get_zpids(zpids, addresses):
     for address in addresses:
         retSet = ZillowApiWorker.getZpids(encode(address[0]), encode(address[1] + ", IL, "+address[2]))
         if not retSet:
-            print("No results for " + address[1] + ", IL, "+address[2])
+            #print("No results for " + address[1] + ", IL, "+address[2])
             noGood.append(address[1] + ", IL, "+address[2])
         else:
             for ret in retSet:
@@ -42,9 +42,10 @@ def get_zpids(zpids, addresses):
                  #   zpids.add(retComp)
 
 def save_results():
-    string = ""
+    string = "<Properties>"
     for result in results:
         string += result
+    string = string + "</Properties>";
     f = open("export.xml", "w")
     f.write(str(string))
     f.close()
@@ -57,8 +58,9 @@ def save_NoGood(noGood):
 
 
 getAddresses()
+#print(addresses)
 get_zpids(zpids, addresses)
-print(zpids)
+#print(zpids)
 save_NoGood(noGood)
 get_results(zpids, results)
 save_results()

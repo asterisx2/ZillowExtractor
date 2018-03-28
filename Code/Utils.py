@@ -2,6 +2,7 @@ class Utils:
 
     def getVals(self, filePath, delimiter):
         list = []
+
         f = open(filePath,'r')
 
         line = f.readline()
@@ -15,11 +16,11 @@ class Utils:
             vv.append(line)
             list.append(vv)
             line = f.readline()
-        start = int(input('Enter the 0 based start index'))
-        end = int(input('Enter the 0 based last index'))
         f.close()
+        start = int(input('Enter the 0 based start index'))
+        size = int(input('Enter no of items'))
         l = []
-        for i in [start, end]:
+        for i in range(start, start + size):
             l.append(list[i])
         return l
 
