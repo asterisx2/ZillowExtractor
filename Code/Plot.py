@@ -3,15 +3,19 @@ import json
 import matplotlib.pyplot as pyplot
 from matplotlib.widgets import CheckButtons
 
+import Price
+
 
 def plot():
     import os
     os.chdir(os.path.dirname(__file__))
-    f = open(os.getcwd() + '\Final.json', 'r')
+    f = open(os.getcwd() + '\WithPrice.json', 'r')
     data = json.load(f)
     f.close()
-    fields = ['Bathrooms','FinishedSqFt','LotSizeSqFt', 'YearBuilt','NumFloors']
-    weight = [2.0, 2.0, 2.0, 2.0, 2.0]
+    fields = ['Bathrooms','FinishedSqFt','LotSizeSqFt', 'YearBuilt','NumFloors','Price']
+    #fields = ['Price']
+    weight = [5.0, 20.0, 15.0, 30.0, 50.0,100.0]
+    #weight = [100.0]
 
     divisor = 0.0
     for w in weight:
@@ -59,12 +63,15 @@ def plot():
 
     colors = ["#ffbe76", "#ff7979", "#badc58", '#f6e58d', '#f9ca24' ,'#f0932b' ,'#eb4d4b' ,'#6ab04c' ,'#7ed6df'
         ,'#e056fd' ,'#686de0' ,'#30336b' ,'#130f40' ,'#95afc0' ,'#535c68' ,'#be2edd' ,'#22a6b3', '#0000ff']
-
+    taxRate = 0.012
     for d in data:
         c = 0
         p = 0.0
         notGood = False
         for f in fields:
+            if not f in d:
+                notGood = True
+                break
             if not d[f]:
                 notGood = True
                 break
@@ -74,13 +81,21 @@ def plot():
         p = p / divisor
 
         if not notGood:
-
+            taxShouldBe = p * taxRate
             for i in range(18):
                 year = 1999 + i;
                 if 'Tax'+str(year) in d:
                     if len(str(d['Tax'+str(year)])) > 2:
                         x[str(year)].append(p)
-                        y[str(year)].append(int(str(d['Tax'+str(year)]).replace(',','').replace('$','')))
+                        #y[str(year)].append(int(str(d['Tax'+str(year)]).replace(',','').replace('$','')))
+                        taxPercentage = ((int(str(d['Tax'+str(year)]).replace(',','').replace('$',''))-int(taxShouldBe))/taxShouldBe) * 100.0
+                        #y coordinate
+                        y[str(year)].append(taxPercentage)
+                        if taxPercentage > 200:
+                            match =  Price.lcs(d['AddressTaken'], d['Street'])/len(d['Street']) * 100.0
+                            print(str(match)+"%, "+str(taxPercentage)+"%[Abnormal Tax Percentage] AddressTaken: " +
+                                  str(d['AddressTaken'])+", Zillow Address: " + d['Street'] + ", Price: " + d['Price'] +", Expected Tax: " +
+                                  str(taxShouldBe)+", Actual Tax: " + str(str(d['Tax'+str(year)]).replace(',','').replace('$','')))
 
     fig, ax = pyplot.subplots()
 

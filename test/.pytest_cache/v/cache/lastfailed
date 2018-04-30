@@ -1,1 +1,4 @@
-{}
+{
+  "TestConsolidator.py": true,
+  "TestConsolidator.py::TestConsolidator::test_getPrice": true
+}

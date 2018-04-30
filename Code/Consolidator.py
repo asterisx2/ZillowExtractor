@@ -7,15 +7,13 @@ class Consoliator():
     def setUp(self):
         import os
         os.chdir(os.path.dirname(__file__))
-        print(os.getcwd())
-        a = open(os.getcwd()+'\Addresses.json', 'r')
+        a = open(os.getcwd() + '\Addresses.json', 'r')
         d = open(os.getcwd() + '\Data.json', 'r')
         t = open(os.getcwd()+'\Tax.json','r')
         addresses = json.load(a)
         data = json.load(d)
         tax = json.load(t)
 
-        a.close()
         d.close()
         t.close()
         return [addresses, data, tax]

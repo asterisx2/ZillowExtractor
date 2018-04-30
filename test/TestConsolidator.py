@@ -18,6 +18,9 @@ class TestConsolidator(unittest.TestCase):
     def test_plot(self):
         plot()
 
+    def test_getPrice(self):
+        consolidator.getPrice()
+
     #def consolidateAddress(self):
 
     #def consolidate(self):
