@@ -6,6 +6,7 @@ from matplotlib.widgets import CheckButtons
 import Price
 
 
+
 def plot():
     import os
     os.chdir(os.path.dirname(__file__))
@@ -15,9 +16,9 @@ def plot():
 
 
     #Fields
-    fields = ['Bathrooms','FinishedSqFt','LotSizeSqFt', 'YearBuilt','NumFloors','Price']
+    fields = ['Bathrooms','FinishedSqFt','LotSizeSqFt', 'YearBuilt','NumFloors']
     #fields = ['Price']
-    weight = [5.0, 20.0, 15.0, 30.0, 50.0,100.0]
+    weight = [20, 50, 50, 20, 20]
     #weight = [100.0]
 
 
@@ -28,7 +29,7 @@ def plot():
         divisor = divisor + w;
 
     x = {}
-    y= {}
+    y = {}
     x['1999'] = []
     x['2000'] = []
     x['2001'] = []
@@ -70,7 +71,7 @@ def plot():
     colors = ["#ffbe76", "#ff7979", "#badc58", '#f6e58d', '#f9ca24' ,'#f0932b' ,'#eb4d4b' ,'#6ab04c' ,'#7ed6df'
         ,'#e056fd' ,'#686de0' ,'#30336b' ,'#130f40' ,'#95afc0' ,'#535c68' ,'#be2edd' ,'#22a6b3', '#0000ff']
 
-    taxRate = 0.012
+    taxRate = 0.019
     for d in data:
         c = 0
         p = 0.0
@@ -83,12 +84,12 @@ def plot():
                 notGood = True
                 break
             else:
-                p = p + float(d[f]) * weight[c]
+                p = p + (float(d[f]) * weight[c]/divisor)
             c = c+1
-        p = p / divisor
+        p = p
 
         if not notGood and float(d['Price']) > 100000.00:
-            taxShouldBe = p * taxRate
+            taxShouldBe = ((p*1000) + float(d['Price']))  * taxRate
             for i in range(18):
                 year = 1999 + i;
                 if 'Tax'+str(year) in d:
@@ -99,14 +100,14 @@ def plot():
 
                         #y coordinate
                         #y[str(year)].append(int(str(d['Tax'+str(year)]).replace(',','').replace('$','')))
-                        taxPercentage = ((int(str(d['Tax'+str(year)]).replace(',','').replace('$',''))-int(taxShouldBe))/taxShouldBe) * 100.0
+                        taxPercentage = ((float(str(d['Tax'+str(year)]).replace(',','').replace('$',''))-float(taxShouldBe))/taxShouldBe) * 100.0
                         y[str(year)].append(taxPercentage)
 
 
 
 
                         #Outliers to print
-                        if taxPercentage > 20000:
+                        if taxPercentage > 200:
                             match =  Price.lcs(d['AddressTaken'], d['Street'])/len(d['Street']) * 100.0
                             print(str(match)+"%, "+str(taxPercentage)+"%[Abnormal Tax Percentage] AddressTaken: " +
                                   str(d['AddressTaken'])+", Zillow Address: " + d['Street'] + ", Price: " + d['Price'] +", Expected Tax: " +
@@ -129,8 +130,8 @@ def plot():
     rax = pyplot.axes([0.9, 0.1, 0.3, 0.5])
     years = ('1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011',
              '2012', '2013', '2014', '2015', '2016')
-    bools = (False, False, False, False, False, False, False, False, False, False, False, False, False, False, False,
-             False, False, False)
+    bools = (True, True, True, True, True, True, True, True, True, True, True, True, True, True, True,
+             True, True, True)
     check = CheckButtons(rax,years ,bools )
     [rec.set_facecolor(colors[i]) for i, rec in enumerate(check.rectangles)]
 
